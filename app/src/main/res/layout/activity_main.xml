@@ -5,19 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <!-- Верхняя зона: тулбар + панель недели -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:title="@string/habits_today"/>
+        android:fitsSystemWindows="true">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title="@string/habits_today" />
+
+        <!-- Панель недели (всегда выше списка, на всю ширину) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weekList"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clipToPadding="false" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Список привычек: располагается ниже AppBarLayout -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:padding="16dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
@@ -27,6 +46,6 @@
         android:contentDescription="@string/add_habit"
         app:layout_anchor="@id/list"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_input_add"/>
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
