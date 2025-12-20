@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Hobby Manager</string>
+
+    <string name="habits_today">Привычки на сегодня</string>
+    <string name="add_habit">Добавить привычку</string>
+    <string name="edit_habit">Редактирование привычки</string>
+
+    <string name="title_hint">Название (например, "Читать 10 минут")</string>
+    <string name="type_label">Тип привычки</string>
+    <string name="type_good">Полезная</string>
+    <string name="type_bad">Вредная</string>
+
+    <string name="schedule_label">Расписание</string>
+    <string name="schedule_days_of_week">Дни недели</string>
+    <string name="schedule_daily">Каждый день</string>
+    <string name="schedule_weekly">Раз в неделю</string>
+    <string name="schedule_monthly">Раз в месяц</string>
+
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+
+    <string name="limit_reached_title">Лимит привычек</string>
+    <string name="limit_reached_message">Можно добавить не более 5 привычек.</string>
+    <string name="ok">ОК</string>
+</resources>
