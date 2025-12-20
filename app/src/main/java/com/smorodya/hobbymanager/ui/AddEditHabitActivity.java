@@ -20,7 +20,7 @@ public class AddEditHabitActivity extends ComponentActivity {
     public static final String EXTRA_HABIT_ID = "habit_id";
 
     private ActivityAddEditHabitBinding binding;
-    private AddEditHabitViewModel vm;
+    private AddEditHabitViewModel viewModel;
 
     private long editingId = -1;
     private Habit editingHabit = null;
@@ -32,7 +32,7 @@ public class AddEditHabitActivity extends ComponentActivity {
         binding = ActivityAddEditHabitBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        vm = new ViewModelProvider(this).get(AddEditHabitViewModel.class);
+        viewModel = new ViewModelProvider(this).get(AddEditHabitViewModel.class);
 
         initDaysChips();
         initScheduleUi();
@@ -41,7 +41,7 @@ public class AddEditHabitActivity extends ComponentActivity {
 
         if (editingId > 0) {
             binding.toolbar.setTitle(getString(R.string.edit_habit));
-            vm.observeHabit(editingId).observe(this, habit -> {
+            viewModel.observeHabit(editingId).observe(this, habit -> {
                 if (habit == null) return;
                 editingHabit = habit;
                 fillForm(habit);
@@ -69,7 +69,7 @@ public class AddEditHabitActivity extends ComponentActivity {
     }
 
     private void initDaysChips() {
-        String[] days = {"Пн","Вт","Ср","Чт","Пт","Сб","Вс"};
+        String[] days = getResources().getStringArray(R.array.week_short);
         for (String d : days) {
             Chip c = new Chip(this);
             c.setText(d);
@@ -121,7 +121,7 @@ public class AddEditHabitActivity extends ComponentActivity {
     private void onSave() {
         String title = binding.etTitle.getText() == null ? "" : binding.etTitle.getText().toString().trim();
         if (TextUtils.isEmpty(title)) {
-            binding.etTitle.setError("Введите название");
+            binding.etTitle.setError(getString(R.string.enter_title));
             return;
         }
 
@@ -138,8 +138,8 @@ public class AddEditHabitActivity extends ComponentActivity {
             mask = readMaskFromChips();
             if (mask == 0) {
                 new AlertDialog.Builder(this)
-                        .setTitle("Расписание")
-                        .setMessage("Выберите хотя бы один день недели.")
+                        .setTitle(R.string.schedule_label)
+                        .setMessage(R.string.select_one_day_message)
                         .setPositiveButton(R.string.ok, null)
                         .show();
                 return;
@@ -158,13 +158,13 @@ public class AddEditHabitActivity extends ComponentActivity {
         if (editingHabit != null) h.id = editingHabit.id;
 
         if (editingHabit == null) {
-            vm.repo().insertHabit(
+            viewModel.repo().insertHabit(
                     h,
                     this::finish,
                     this::showLimitReached
             );
         } else {
-            vm.repo().updateHabit(h, this::finish);
+            viewModel.repo().updateHabit(h, this::finish);
         }
     }
 

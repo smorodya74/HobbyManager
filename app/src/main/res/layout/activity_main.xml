@@ -6,6 +6,8 @@
     android:layout_height="match_parent">
 
     <!-- Верхняя зона: тулбар + панель недели -->
+
+    <!-- Список привычек: располагается ниже AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -16,26 +18,24 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:title="@string/habits_today" />
+            android:title="@string/main_title" />
 
-        <!-- Панель недели (всегда выше списка, на всю ширину) -->
+        <!-- Панель недели (по центру) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/weekList"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="56dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:layout_gravity="center_horizontal"
             android:clipToPadding="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Список привычек: располагается ниже AppBarLayout -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
         android:clipToPadding="false"
+        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

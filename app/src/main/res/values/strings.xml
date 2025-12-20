@@ -22,4 +22,25 @@
     <string name="limit_reached_title">Лимит привычек</string>
     <string name="limit_reached_message">Можно добавить не более 5 привычек.</string>
     <string name="ok">ОК</string>
+
+    <!-- Added by refactor: main texts and placeholders -->
+    <string name="main_title">Привычки</string>
+    <string name="day_placeholder">20</string>
+
+    <string name="delete_habit_title">Удалить привычку?</string>
+    <string name="delete_habit_message">Привычка будет удалена.</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="enter_title">Введите название</string>
+    <string name="select_one_day_message">Выберите хотя бы один день недели.</string>
+
+    <string-array name="week_short">
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+        <item>Вс</item>
+    </string-array>
 </resources>

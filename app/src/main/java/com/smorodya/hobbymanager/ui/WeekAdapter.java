@@ -13,7 +13,7 @@ import com.google.android.material.color.MaterialColors;
 import com.smorodya.hobbymanager.R;
 import com.smorodya.hobbymanager.databinding.ItemWeekDayBinding;
 
-class WeekAdapterOld extends ListAdapter<DayItem, WeekAdapterOld.VH> {
+public class WeekAdapter extends ListAdapter<DayItem, WeekAdapter.VH> {
 
     public interface Listener {
         void onDayClick(DayItem item);
@@ -21,7 +21,7 @@ class WeekAdapterOld extends ListAdapter<DayItem, WeekAdapterOld.VH> {
 
     private final Listener listener;
 
-    public WeekAdapterOld(Listener listener) {
+    public WeekAdapter(Listener listener) {
         super(DIFF);
         this.listener = listener;
     }

@@ -45,7 +45,7 @@ public class HabitAdapter extends ListAdapter<DueHabit, HabitAdapter.VH> {
         DueHabit item = getItem(position);
 
         h.b.title.setText(item.habit.title);
-        h.b.subtitle.setText(SummaryFormatter.format(item.habit));
+        h.b.subtitle.setText(SummaryFormatter.format(h.itemView.getContext(), item.habit));
 
         // Важно: сначала обнуляем слушатель (RecyclerView реюзит ViewHolder)
         h.b.check.setOnCheckedChangeListener(null);

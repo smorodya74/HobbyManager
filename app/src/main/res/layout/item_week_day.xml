@@ -11,7 +11,7 @@
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="20"
+        android:text="@string/day_placeholder"
         android:textSize="16sp"
         tools:ignore="HardcodedText" />
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.smorodya.hobbymanager.R;
 import com.smorodya.hobbymanager.databinding.ActivityMainBinding;
 import com.smorodya.hobbymanager.logic.DateUtils;
 import com.smorodya.hobbymanager.logic.DueHabit;
@@ -22,10 +23,10 @@ import java.util.ArrayList;
 public class MainActivity extends ComponentActivity implements HabitAdapter.Listener {
 
     private ActivityMainBinding binding;
-    private MainViewModel vm;
+    private MainViewModel viewModel;
 
     private HabitAdapter habitsAdapter;
-    private WeekDaysAdapter weekAdapter;
+    private WeekAdapter weekAdapter;
 
     private LocalDate selectedDate = LocalDate.now();
 
@@ -36,66 +37,99 @@ public class MainActivity extends ComponentActivity implements HabitAdapter.List
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        vm = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        // --- Week row ---
-        weekAdapter = new WeekDaysAdapter(item -> {
+        setupWeekRow();
+        setupHabitsList();
+
+        // FAB: добавление
+        binding.fabAdd.setOnClickListener(v ->
+                startActivity(new Intent(this, AddEditHabitActivity.class)));
+
+        attachSwipeToDelete();
+
+        // Инициализация UI на "сегодня"
+        viewModel.setSelectedDate(DateUtils.toInt(selectedDate));
+        updateWeek(selectedDate);
+        updateTitle(selectedDate);
+
+        // Если в MainViewModel есть observeSelectedDate(), то заголовок можно обновлять реактивно.
+        // Это безопасно и гарантирует синхронизацию заголовка, даже если дата изменится в ViewModel.
+        viewModel.observeSelectedDate().observe(this, d -> {
+            if (d == null) return;
+            LocalDate date = DateUtils.fromInt(d);
+            selectedDate = date;
+            updateTitle(date);
+        });
+    }
+
+    private void setupWeekRow() {
+        weekAdapter = new WeekAdapter(item -> {
             selectedDate = item.date;
 
-            submitCurrentWeek(selectedDate);
+            updateWeek(selectedDate);
+            updateTitle(selectedDate);
 
-            vm.setSelectedDate(DateUtils.toInt(selectedDate));
+            viewModel.setSelectedDate(DateUtils.toInt(selectedDate));
         });
 
         binding.weekList.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.weekList.setAdapter(weekAdapter);
+    }
 
-        vm.setSelectedDate(DateUtils.toInt(selectedDate));
-        submitCurrentWeek(selectedDate);
-
-        // --- Habits list ---
+    private void setupHabitsList() {
         habitsAdapter = new HabitAdapter(this);
+
         binding.list.setLayoutManager(new LinearLayoutManager(this));
         binding.list.setAdapter(habitsAdapter);
 
-        vm.observeDueHabits().observe(this, dueHabits -> habitsAdapter.submitList(dueHabits));
-
-        binding.fabAdd.setOnClickListener(v ->
-                startActivity(new Intent(this, AddEditHabitActivity.class)));
-
-        attachSwipeToDelete();
+        viewModel.observeDueHabits().observe(this, dueHabits -> habitsAdapter.submitList(dueHabits));
     }
 
-    private void submitCurrentWeek(LocalDate selected) {
+    private void updateWeek(LocalDate selected) {
         LocalDate today = LocalDate.now();
         LocalDate monday = WeekUtils.mondayOfWeek(today);
 
-        ArrayList<WeekDayItem> items = new ArrayList<>();
+        ArrayList<DayItem> items = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             LocalDate d = monday.plusDays(i);
-            items.add(new WeekDayItem(d, d.equals(today), d.equals(selected)));
+            items.add(new DayItem(d, d.equals(today), d.equals(selected)));
         }
         weekAdapter.submitList(items);
+    }
+
+    private void updateTitle(LocalDate date) {
+        LocalDate today = LocalDate.now();
+        if (date.equals(today)) {
+            binding.toolbar.setTitle(getString(R.string.habits_today));
+        } else {
+            // "Привычки • 20.12"
+            String title = getString(R.string.main_title) + " • " +
+                    String.format("%02d.%02d", date.getDayOfMonth(), date.getMonthValue());
+            binding.toolbar.setTitle(title);
+        }
     }
 
     private void attachSwipeToDelete() {
         ItemTouchHelper.SimpleCallback cb = new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
-            @Override public boolean onMove(RecyclerView rv, RecyclerView.ViewHolder vh, RecyclerView.ViewHolder tgt) {
+            @Override
+            public boolean onMove(RecyclerView rv, RecyclerView.ViewHolder vh, RecyclerView.ViewHolder tgt) {
                 return false;
             }
 
-            @Override public void onSwiped(RecyclerView.ViewHolder vh, int dir) {
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder vh, int dir) {
                 int pos = vh.getBindingAdapterPosition();
                 DueHabit item = habitsAdapter.getCurrentList().get(pos);
 
                 new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Удалить привычку?")
-                        .setMessage("Привычка будет удалена.")
-                        .setPositiveButton("Удалить", (d, w) -> vm.deleteHabit(item.habit))
-                        .setNegativeButton("Отмена", (d, w) -> habitsAdapter.notifyItemChanged(pos))
+                        .setTitle(getString(R.string.delete_habit_title))
+                        .setMessage(getString(R.string.delete_habit_message))
+                        .setPositiveButton(R.string.delete, (d, w) -> viewModel.deleteHabit(item.habit))
+                        .setNegativeButton(R.string.cancel, (d, w) -> habitsAdapter.notifyItemChanged(pos))
                         .setOnCancelListener(d -> habitsAdapter.notifyItemChanged(pos))
                         .show();
             }
@@ -106,7 +140,7 @@ public class MainActivity extends ComponentActivity implements HabitAdapter.List
 
     @Override
     public void onChecked(long habitId, boolean checked) {
-        vm.onCheckedChanged(habitId, checked);
+        viewModel.onCheckedChanged(habitId, checked);
     }
 
     @Override
