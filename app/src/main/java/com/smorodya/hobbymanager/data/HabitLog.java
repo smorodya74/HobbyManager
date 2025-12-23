@@ -15,7 +15,6 @@ public class HabitLog {
 
     public long habitId;
 
-    // [YYYY MM DD] без пробелов только
     public int date;
 
     public boolean checked;

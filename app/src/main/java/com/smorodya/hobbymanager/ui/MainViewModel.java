@@ -26,10 +26,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private final HabitRepository repo;
 
-    // Выбранная дата (yyyymmdd)
     private final MutableLiveData<Integer> selectedDate = new MutableLiveData<>(DateUtils.todayInt());
 
-    // Прокси LiveData, которая будет "подключаться" к logs на выбранную дату
     private final MediatorLiveData<List<HabitLog>> logsForSelectedDate = new MediatorLiveData<>();
     private LiveData<List<HabitLog>> currentLogsSource;
 
@@ -42,28 +40,22 @@ public class MainViewModel extends AndroidViewModel {
         super(application);
         repo = new HabitRepository(application);
 
-        // 1) Подписка на список привычек
         dueHabits.addSource(repo.observeHabits(), habits -> {
             cachedHabits = habits == null ? new ArrayList<>() : habits;
             recompute();
         });
 
-        // 2) Подписка на логи выбранной даты
         dueHabits.addSource(logsForSelectedDate, logs -> {
             cachedLogs = logs == null ? new ArrayList<>() : logs;
             recompute();
         });
 
-        // 3) При смене selectedDate переключаем источник логов
         dueHabits.addSource(selectedDate, d -> {
             if (d == null) d = DateUtils.todayInt();
             switchLogsSource(d);
-            // recompute() можно не вызывать тут, потому что logsForSelectedDate тоже триггернет,
-            // но оставим для быстрого обновления (без ожидания эмиссии)
             recompute();
         });
 
-        // Инициализация источника логов на стартовую дату
         Integer init = selectedDate.getValue();
         if (init == null) init = DateUtils.todayInt();
         switchLogsSource(init);

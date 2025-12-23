@@ -22,6 +22,7 @@
     </activity>
 
     <activity android:name=".ui.AddEditHabitActivity" />
+    <activity android:name=".ui.StatsActivity" />
     </application>
 
 </manifest>

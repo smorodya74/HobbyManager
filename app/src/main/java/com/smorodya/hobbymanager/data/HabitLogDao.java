@@ -22,4 +22,7 @@ public interface HabitLogDao {
 
     @Query("DELETE FROM habit_logs WHERE habitId = :habitId")
     void deleteLogsForHabit(long habitId);
+
+    @Query("SELECT * FROM habit_logs WHERE date BETWEEN :from AND :to")
+    List<HabitLog> getLogsBetweenSync(int from, int to);
 }

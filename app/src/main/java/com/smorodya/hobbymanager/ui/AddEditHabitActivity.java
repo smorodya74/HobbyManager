@@ -60,7 +60,6 @@ public class AddEditHabitActivity extends ComponentActivity {
             binding.chipsDays.setVisibility(days ? View.VISIBLE : View.GONE);
         });
 
-        // switch: true=полезная, false=вредная
         binding.swType.setChecked(true);
         binding.swType.setText(getString(R.string.type_good));
         binding.swType.setOnCheckedChangeListener((btn, isChecked) -> {
@@ -101,7 +100,7 @@ public class AddEditHabitActivity extends ComponentActivity {
         for (int i = 0; i < binding.chipsDays.getChildCount(); i++) {
             View v = binding.chipsDays.getChildAt(i);
             if (v instanceof Chip) {
-                int bit = 1 << i; // Пн=0 ... Вс=6
+                int bit = 1 << i;
                 ((Chip) v).setChecked((mask & bit) != 0);
             }
         }

@@ -10,9 +10,8 @@ import java.time.YearMonth;
 
 public class ScheduleUtils {
 
-    // Пн=0 ... Вс=6
     public static int dayOfWeekBit(LocalDate date) {
-        int dow = date.getDayOfWeek().getValue(); // 1..7
+        int dow = date.getDayOfWeek().getValue();
         return 1 << (dow - 1);
     }
 

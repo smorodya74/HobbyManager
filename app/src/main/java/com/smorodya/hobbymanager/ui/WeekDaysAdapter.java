@@ -50,7 +50,7 @@ class WeekAdapterOld extends ListAdapter<DayItem, WeekAdapterOld.VH> {
         h.b.tvDay.setText(String.valueOf(item.date.getDayOfMonth()));
 
         int onSurface = MaterialColors.getColor(h.itemView, com.google.android.material.R.attr.colorOnSurface);
-        int todayRed = ContextCompat.getColor(h.itemView.getContext(), R.color.today_red);
+        int todayRed = ContextCompat.getColor(h.itemView.getContext(), R.color.red);
 
         if (item.isToday) {
             h.b.tvDay.setTextColor(todayRed);

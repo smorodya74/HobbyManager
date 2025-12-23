@@ -42,25 +42,24 @@ public class MainActivity extends ComponentActivity implements HabitAdapter.List
         setupWeekRow();
         setupHabitsList();
 
-        // FAB: добавление
         binding.fabAdd.setOnClickListener(v ->
                 startActivity(new Intent(this, AddEditHabitActivity.class)));
 
         attachSwipeToDelete();
 
-        // Инициализация UI на "сегодня"
         viewModel.setSelectedDate(DateUtils.toInt(selectedDate));
         updateWeek(selectedDate);
         updateTitle(selectedDate);
 
-        // Если в MainViewModel есть observeSelectedDate(), то заголовок можно обновлять реактивно.
-        // Это безопасно и гарантирует синхронизацию заголовка, даже если дата изменится в ViewModel.
         viewModel.observeSelectedDate().observe(this, d -> {
             if (d == null) return;
             LocalDate date = DateUtils.fromInt(d);
             selectedDate = date;
             updateTitle(date);
         });
+
+        binding.btnStats.setOnClickListener(v ->
+                startActivity(new Intent(this, StatsActivity.class)));
     }
 
     private void setupWeekRow() {
@@ -104,7 +103,6 @@ public class MainActivity extends ComponentActivity implements HabitAdapter.List
         if (date.equals(today)) {
             binding.toolbar.setTitle(getString(R.string.habits_today));
         } else {
-            // "Привычки • 20.12"
             String title = getString(R.string.main_title) + " • " +
                     String.format("%02d.%02d", date.getDayOfMonth(), date.getMonthValue());
             binding.toolbar.setTitle(title);

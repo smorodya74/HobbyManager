@@ -19,14 +19,11 @@ public class Habit {
     @NonNull
     public ScheduleMode scheduleMode;
 
-    // Если scheduleMode = DAYS_OF_WEEK: маска 7 бит, Пн=bit0 ... Вс=bit6
     public int daysOfWeekMask;
 
-    // Если scheduleMode = INTERVAL
     @NonNull
     public Interval interval;
 
-    // Якорная дата для weekly/monthly (yyyymmdd)
     public int startDate;
 
     public long createdAtMillis;

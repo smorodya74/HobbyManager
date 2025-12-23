@@ -32,7 +32,6 @@ public class HabitRepository {
         return logDao.observeLogsByDate(date);
     }
 
-    // Добавление с ограничением 5
     public void insertHabit(Habit habit, Runnable onSuccess, Runnable onLimitReached) {
         io.execute(() -> {
             int count = habitDao.getCountSync();
@@ -69,5 +68,17 @@ public class HabitRepository {
                 logDao.update(log);
             }
         });
+    }
+
+    public List<Habit> getHabitsSync() {
+        return habitDao.getAllSync();
+    }
+
+    public List<HabitLog> getLogsBetweenSync(int from, int to) {
+        return logDao.getLogsBetweenSync(from, to);
+    }
+
+    public ExecutorService io() {
+        return io;
     }
 }

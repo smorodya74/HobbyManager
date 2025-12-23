@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.HobbyManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Основные цвета -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+
+        <!-- Дополнительно (не обязательно, но полезно) -->
+        <item name="android:statusBarColor">@color/status_bar</item>
+        <!-- false = иконки/текст в status bar будут СВЕТЛЫМИ (под тёмный фон) -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.HobbyManager" parent="Base.Theme.HobbyManager" />

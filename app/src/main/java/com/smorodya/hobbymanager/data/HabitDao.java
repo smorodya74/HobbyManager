@@ -25,4 +25,7 @@ public interface HabitDao {
 
     @Delete
     void delete(Habit habit);
+
+    @Query("SELECT * FROM habits")
+    List<Habit> getAllSync();
 }
