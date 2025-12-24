@@ -16,6 +16,7 @@ import com.smorodya.hobbymanager.data.HabitLogDao;
 import com.smorodya.hobbymanager.data.HabitType;
 import com.smorodya.hobbymanager.logic.DateUtils;
 import com.smorodya.hobbymanager.logic.ScheduleUtils;
+import com.smorodya.hobbymanager.logic.WeekUtils;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -83,8 +84,9 @@ public class StatsViewModel extends AndroidViewModel {
                 return;
             }
 
-            LocalDate end = DateUtils.fromInt(baseDateFinal);
-            LocalDate start = calcStartDate(periodFinal, end, habits);
+            DateRange range = calcRange(periodFinal, DateUtils.fromInt(baseDateFinal), habits);
+            LocalDate start = range.start;
+            LocalDate end = range.end;
 
             int from = DateUtils.toInt(start);
             int to = DateUtils.toInt(end);
@@ -129,21 +131,41 @@ public class StatsViewModel extends AndroidViewModel {
         });
     }
 
-    private LocalDate calcStartDate(StatsPeriod p, LocalDate end, List<Habit> habits) {
+    private DateRange calcRange(StatsPeriod p, LocalDate baseDate, List<Habit> habits) {
         switch (p) {
-            case DAY:
-                return end;
-            case WEEK:
-                return end.minusDays(6);
-            case MONTH:
-                return end.minusDays(29);
+            case DAY: {
+                return new DateRange(baseDate, baseDate);
+            }
+            case WEEK: {
+                LocalDate monday = WeekUtils.mondayOfWeek(baseDate);
+                return new DateRange(monday, monday.plusDays(6));
+            }
+            case MONTH: {
+                LocalDate start = baseDate.withDayOfMonth(1);
+                LocalDate end = baseDate.withDayOfMonth(baseDate.lengthOfMonth());
+                return new DateRange(start, end);
+            }
             case ALL:
-            default:
+            default: {
+                LocalDate end = LocalDate.now();
                 int min = DateUtils.toInt(end);
                 for (Habit h : habits) {
                     if (h.startDate > 0 && h.startDate < min) min = h.startDate;
                 }
-                return DateUtils.fromInt(min);
+                LocalDate start = DateUtils.fromInt(min);
+                if (start.isAfter(end)) start = end;
+                return new DateRange(start, end);
+            }
+        }
+    }
+
+    private static class DateRange {
+        final LocalDate start;
+        final LocalDate end;
+
+        DateRange(LocalDate start, LocalDate end) {
+            this.start = start;
+            this.end = end;
         }
     }
 

@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.*;
 
 import com.google.android.material.color.MaterialColors;
+import com.smorodya.hobbymanager.R;
 import com.smorodya.hobbymanager.databinding.ItemPeriodBinding;
 
 public class PeriodAdapter extends ListAdapter<PeriodItem, PeriodAdapter.VH> {

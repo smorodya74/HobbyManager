@@ -16,6 +16,11 @@ public class ScheduleUtils {
     }
 
     public static boolean isDueToday(Habit habit, LocalDate date) {
+        if (habit.startDate > 0) {
+            LocalDate startDate = DateUtils.fromInt(habit.startDate);
+            if (date.isBefore(startDate)) return false;
+        }
+
         if (habit.scheduleMode == ScheduleMode.DAYS_OF_WEEK) {
             int bit = dayOfWeekBit(date);
             return (habit.daysOfWeekMask & bit) != 0;
