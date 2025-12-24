@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -29,9 +30,8 @@ public class DonutChartView extends View {
     public DonutChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) { super(context, attrs, defStyleAttr); init(); }
 
     private void init() {
-        int onSurface = MaterialColors.getColor(this, com.google.android.material.R.attr.colorOnSurface);
-
         int green = ContextCompat.getColor(getContext(), R.color.green);
+        int claude = ContextCompat.getColor(getContext(), R.color.claude);
 
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeWidth(dp(14));
@@ -42,7 +42,7 @@ public class DonutChartView extends View {
         fgPaint.setStrokeCap(Paint.Cap.ROUND);
         fgPaint.setColor(green);
 
-        textPaint.setColor(onSurface);
+        textPaint.setColor(claude);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(dp(18));
         textPaint.setFakeBoldText(true);
@@ -55,7 +55,7 @@ public class DonutChartView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         float cx = getWidth() / 2f;

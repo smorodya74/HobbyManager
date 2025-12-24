@@ -7,4 +7,5 @@
     <color name="brand_primary">#2E7D32</color>
     <color name="brand_secondary">#1B5E20</color>
     <color name="status_bar">#1B5E20</color>
+    <color name="claude">#61C2FF</color>
 </resources>
